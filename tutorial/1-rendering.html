@@ -15,7 +15,8 @@
  * The template part of the function is html that is the same for all messages.
  * Let's break this function down:
  */
-var renderSomethingOnThePage = function(message) {
+var renderSomethingOnThePage = function(message, styleObj) {
+  styleObj = styleObj || {};
   /* We will use jQuery to append a message to the page,
    * but we dont want all of this HTML to be in the `el.append` function call.
    *
@@ -45,7 +46,7 @@ var renderSomethingOnThePage = function(message) {
    * is 'rendered', or drawn, with the message you pass to
    * the function argument.
    */
-  $('body').append(html);
+  $('body').append(html).css(styleObj);
 };
 
 // Let's try it out:
@@ -56,8 +57,8 @@ renderSomethingOnThePage(
  * will draw something to the page using the template defined in that function:
  */
 
-// renderSomethingOnThePage('Each additional message you give this function...');
-// renderSomethingOnThePage('...will draw a new message on the page!');
+renderSomethingOnThePage('Each additional message you give this function...');
+renderSomethingOnThePage('...will draw a new message on the page!');
 
 /* Let's revisit what we have learned from the last exercise.
  * We are working with a different application this time - we are going to be
@@ -74,7 +75,7 @@ renderSomethingOnThePage(
  * This time, we will see what you might want to extend the model with.
  *
  * _Confused about what `extend` means or does? This is all about the prototype
- * and inhertance. If you're stuck, halp yourself a teacher to explain._
+ * and inhertance. If you're stuck, help yourself a teacher to explain._
  */
 var Message = Backbone.Model.extend({  
   /* Our messages should have two methods that someone could call.
@@ -101,7 +102,8 @@ var Message = Backbone.Model.extend({
      * Putting it into the initialize function let's us be sure that
      * all models that are created will have event listeners on them.
      */
-    this.on(YOUR CODE HERE);
+    this.set('message','initial message');
+    this.on('change', function(e){ console.log( e.attributes.message )});
     /* It is your turn to write the event handler.
      *
      * Make an event listener that will listen for a `change` in this model's
@@ -130,11 +132,15 @@ var Message = Backbone.Model.extend({
   }
 });
 
+var myMessage = new Message();
+// myMessage.alertThisMessage();
+myMessage.set('message','goodbye');
+
 /* How would you call the second method?
- *
+ * myMessage.alertThisMessage();
  * Try it yourself, then check out the answer at the bottom of this script.
  */
-
+myMessage.alertThisMessage();
 
 // Let's try it out: 'instantiate' an instance of the class defined above:
 var myNewMessage = new Message();
